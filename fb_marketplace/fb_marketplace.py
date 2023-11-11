@@ -15,7 +15,7 @@ def read_csv_file(filename):
             data.append(row[0])  # Assuming each row contains a single word
     return data
 
-# Specify the CSV file to read
+# Chooses the CSV file to read
 csv_filename = 'words.csv'
 
 # Read the data from the CSV file and store it in a variable
@@ -40,15 +40,15 @@ listing_sizes = soup.findAll(class_="tile__details__pipe__size")
 likes = soup.findAll(class_="social-action-bar__like")
 tagsimage = soup.findAll(class_="img__container img__container--square")
 
-yeezy_gaplistingimg = []
+fb_listingimg = []
 for tag in tagsimage[1:]:
     img_tag = tag.find('img')
     if img_tag:
         img_url = img_tag.get('src')
-        yeezy_gaplistingimg.append(img_url)
+        fb_listingimg.append(img_url)
         print(img_url)
     else:
-        yeezy_gaplistingimg.append('')
+        fb_listingimg.append('')
         print('No image available')
 
 yeezy_gaplisting = []
@@ -76,7 +76,7 @@ for i in range(1, len(tagsname)):
     yeezy_gaplistinglikes.append([likes2])
 
 
-df = pd.DataFrame(np.column_stack([yeezy_gaplisting, yeezy_gaplistingcost, yeezy_gaplistingsize, yeezy_gaplistinglikes, yeezy_gaplistingimg]), columns=['Item', 'Cost', 'size', 'Likes', 'ImgLink'])
+df = pd.DataFrame(np.column_stack([yeezy_gaplisting, yeezy_gaplistingcost, yeezy_gaplistingsize, yeezy_gaplistinglikes, fb_listingimg]), columns=['Item', 'Cost', 'size', 'Likes', 'ImgLink'])
 df.to_csv(words_string + '-poshmark.xls')
 
 
