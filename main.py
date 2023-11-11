@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
+import matplotlib.pyplot as plt
 
 # URL of the page to scrape
 url = 'https://example.com/listings'
