@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 
 # URL of the page to scrape
-url = 'https://example.com/listings'
+url = 'https://www.facebook.com/marketplace/sanfrancisco/search/?query=subleases'
 
 # Send a request to the URL
 response = requests.get(url)
