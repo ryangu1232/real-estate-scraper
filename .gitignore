@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 .DS_Store
 calvin commit 
+=======
+git rm --cached .DS_Store
+.DS_Store
+>>>>>>> e68920b23e502efaf986ac6a4bbf202529181d1e
