@@ -1,45 +1,107 @@
-#this is the main folder
+import requests
+import string
+from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
-import requests
-from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 
-# URL of the page to scrape
-url = 'https://www.facebook.com/marketplace/sanfrancisco/search/?query=subleases'
+import csv
 
-# Send a request to the URL
-response = requests.get(url)
+def read_csv_file(filename):
+    data = []
+    with open(filename, 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            data.append(row[0])  # Assuming each row contains a single word
+    return data
 
-# Create a list to hold all scraped data
-data = []
+# Specify the CSV file to read
+csv_filename = 'words.csv'
 
-# Check if the request was successful
-if response.status_code == 200:
-    # Parse the HTML content
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    # Find all listings - adjust the selector based on the actual HTML structure
-    listings = soup.find_all('div', class_='listing-class') # Adjust this accordingly
+# Read the data from the CSV file and store it in a variable
+words = read_csv_file(csv_filename)
 
-    for listing in listings:
-        # Extract information from each listing
-        # Adjust these based on the actual structure and data of the listings
-        title = listing.find('h2').text.strip() if listing.find('h2') else 'No Title'
-        price = listing.find('span', class_='price-class').text.strip() if listing.find('span', class_='price-class') else 'No Price'
-        description = listing.find('p', class_='description-class').text.strip() if listing.find('p', class_='description-class') else 'No Description'
+# Convert the list of words into a string without quotes and brackets
+words_string = ', '.join(words)
 
-        # Append the data to the list
-        data.append({'Title': title, 'Price': price, 'Description': description})
+# Print the resulting string
+print(words_string)
+ebay_url = 'https://poshmark.com/search?query=' + words_string + '%20&type=listings&src=dir'
+response = requests.get(ebay_url)
 
-else:
-    print('Failed to retrieve the webpage')
+soup = BeautifulSoup(response.text, "html.parser")
 
-# Create a DataFrame from the scraped data
-df = pd.DataFrame(data)
+tagsname = soup.findAll(class_="title__condition__container")
+tagscost = soup.findAll(class_="p--t--1 fw--bold")
+listing_sizes = soup.findAll(class_="tile__details__pipe__size")
+likes = soup.findAll(class_="social-action-bar__like")
+tagsimage = soup.findAll(class_="img__container img__container--square")
 
-# Save the DataFrame to an Excel file
-excel_filename = 'scraped_data.xlsx'
-df.to_excel(excel_filename, index=False)
+yeezy_gaplistingimg = []
+for tag in tagsimage[1:]:
+    img_tag = tag.find('img')
+    if img_tag:
+        img_url = img_tag.get('src')
+        yeezy_gaplistingimg.append(img_url)
+        print(img_url)
+    else:
+        yeezy_gaplistingimg.append('')
+        print('No image available')
 
-print(f'Data saved to {excel_filename}')
+yeezy_gaplisting = []
+for i in range(1, len(tagsname)):
+    title = " ".join(str(tagsname[i].text).split())
+    yeezy_gaplisting.append([title])
+
+yeezy_gaplistingsize = []
+for i in range(1, len(tagsname)):
+    if len(listing_sizes) > i:
+        size = " ".join(str(listing_sizes[i].text).split())
+    else:
+        size = ''
+    yeezy_gaplistingsize.append([size])
+
+yeezy_gaplistingcost = []
+for i in range(1, len(tagsname)):
+    price_text = " ".join(str(tagscost[i].text).split())
+    price = float(''.join(filter(str.isdigit, price_text))) 
+    yeezy_gaplistingcost.append([price])
+
+yeezy_gaplistinglikes = []
+for i in range(1, len(tagsname)):
+    likes2 = " ".join(str(likes[i].text).split())
+    yeezy_gaplistinglikes.append([likes2])
+
+
+df = pd.DataFrame(np.column_stack([yeezy_gaplisting, yeezy_gaplistingcost, yeezy_gaplistingsize, yeezy_gaplistinglikes, yeezy_gaplistingimg]), columns=['Item', 'Cost', 'size', 'Likes', 'ImgLink'])
+df.to_csv(words_string + '-poshmark.xls')
+
+
+print(df.describe())
+counts = df['Item'].value_counts()
+
+# Drop rows with missing values in the 'Cost' column
+df = df.dropna(subset=['Cost'])
+
+# Convert 'Cost' column to numeric
+df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
+
+# Convert 'Likes' column to numeric
+df['Likes'] = pd.to_numeric(df['Likes'], errors='coerce')
+
+# Create boxplot
+fig, ax = plt.subplots()
+plt.boxplot([df[df['Likes'] > 5]['Cost'].values,
+             df[df['Likes'] <= 5]['Cost'].values],
+            labels=['More than 5 Likes', 'Less than or equal to 5 Likes'])
+
+plt.title('Cost Distribution by Number of Likes')
+plt.xlabel('Likes')
+plt.ylabel('Cost')
+
+fig.savefig('likes_cost_boxplot.png')
+
+
+corr_coef = df['Cost'].corr(df['Likes'], method='spearman')
+print(f"Correlation coefficient between 'Cost' and 'Likes': {corr_coef:.2f}")
+#correlaiton coefficient
