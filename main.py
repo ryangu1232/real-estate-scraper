@@ -26,7 +26,9 @@ words_string = ', '.join(words)
 
 # Print the resulting string
 print(words_string)
-ebay_url = 'https://poshmark.com/search?query=' + words_string + '%20&type=listings&src=dir'
+location = input("Please enter your location")
+search_term = input("Input the search term")
+ebay_url = f"https://www.facebook.com/marketplace/{location}/search/?query={search_term}"
 response = requests.get(ebay_url)
 
 soup = BeautifulSoup(response.text, "html.parser")
