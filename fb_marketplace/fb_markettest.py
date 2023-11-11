@@ -12,9 +12,9 @@ def write_word_to_csv(word):
         writer.writerow([word])
 
 browser = Browser("chrome")
-
+#make the search parameters
 location = "sanfrancisco"
-base_url = f"https://www.facebook.com/marketplace/sanfrancisco/search/?"
+base_url = f"https://www.facebook.com/marketplace/{location}/search/?"
 min_price = 0
 max_price = 50000
 days_listed = 30
@@ -25,7 +25,7 @@ url = f"{base_url}minPrice={min_price}&maxPrice={max_price}&daysSinceListed={day
 browser.visit(url)
 
 # Define the number of times to scroll the page
-scroll_count = 4
+scroll_count = 10
 
 # Define the delay (in seconds) between each scroll
 scroll_delay = 0.1
@@ -44,8 +44,8 @@ html = browser.html
 # Create a BeautifulSoup object from the scraped HTML
 market_soup = soup(html, 'html.parser')
 
-#puts the html data into a csv file for me to look at and visualize better
-write_word_to_csv(market_soup)
+#puts the html data into a csv file for me to look at and visualize better [NOT USING RIGHT NOW]
+#write_word_to_csv(market_soup)
 
 # Check if HTML was scraped correctly
 browser.quit()
