@@ -28,8 +28,9 @@ words_string = ', '.join(words)
 print(words_string)
 location = input("Please enter your location")
 search_term = input("Input the search term")
-ebay_url = f"https://www.facebook.com/marketplace/{location}/search/?query={search_term}"
-response = requests.get(ebay_url)
+
+facebook_url = f"https://www.facebook.com/marketplace/{location}/search/?query={search_term}"
+response = requests.get(facebook_url)
 
 soup = BeautifulSoup(response.text, "html.parser")
 
