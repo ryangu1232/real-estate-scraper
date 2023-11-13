@@ -150,8 +150,8 @@ vehicles_df.tail()"""
 #creates the table
 df = pd.DataFrame({'Name' : description_list[2:], 'Price' : prices_list}) 
 df.to_csv('listings.csv', index=False, encoding='utf-8')
-#df.to_excel("excel_listings.xlsx", sheet_name='Sheet_name_1')  
-#
+df.to_excel("excel_listings.xlsx", index = False)  
+
 
 
 
