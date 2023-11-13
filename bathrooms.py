@@ -25,10 +25,15 @@ with open('subletbath&rooms_listings.csv', mode='w', newline='', encoding='utf-8
         bed_bath_info = listing.find('div', class_='col-12')
 
         if bed_bath_info:
-            beds_info = bed_bath_info.find('span', title=lambda x: x and 'Bed Room' in x)
+            beds_info = bed_bath_info.find('span')
+            # if beds_info: 
+            #     print("1")
+            # else: 
+            #     print("2")
+            #     beds_info = bed_bath_info.find('i', class_='fas fa-bed')
             baths_info = bed_bath_info.find('span', title=lambda x: x and 'bath' in x)
-            beds = beds_info.get_text(strip=True) if beds_info else 'N/A'
-            baths = baths_info.get_text(strip=True) if baths_info else 'N/A'
+            beds = beds_info.get_text(strip=True) #if beds_info else 'N/A'
+            baths = baths_info.get_text(strip=True) #if baths_info else 'N/A'
 
 
         # Write the data to the CSV file
