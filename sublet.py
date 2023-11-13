@@ -8,24 +8,19 @@ response = requests.get(url)
 content = response.text
 
 soup = BeautifulSoup(content, 'html.parser')
-# print(soup.prettify())
 
-boxes = soup.findAll('div', class_="col-12 font") 
-for box in boxes[1:]:
-    print(box.text)
+# Find all listings
+listings = soup.findAll('div', class_="col-12 font") 
 
+for listing in listings[1:]:
+    # Extract the text and split it into components
+    parts = listing.text.split('\n')
 
-prices = soup.findAll('div', class_="col-12 font")
-for price in prices[1:]:
-    price = price.find_all(string=True,recursive=False)
-    print(price)
+    # Clean the parts to remove extra whitespace
+    cleaned_parts = [part.strip() for part in parts if part.strip()]
 
-
-# types = soup.findAll('a', class_="float-right supply-details-link text-black")
-# for type in types[1:]:
-#     type = type.get_text()
-    # print(type)
-
-# price = soup.find('span', class_="js-currency float-left text-black")
-# print(price.text)
-
+    # Format the output (assuming the first element is the price and the second is the type)
+    if len(cleaned_parts) >= 2:
+        price = cleaned_parts[0]
+        type_of_space = cleaned_parts[1]
+        print(f"{type_of_space}, {price}")
