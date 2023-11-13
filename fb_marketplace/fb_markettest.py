@@ -68,15 +68,14 @@ urls_list = [url.get('href') for url in urls_div]"""
 """location_div = market_soup.find_all('a', class_= "x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft")
 location_list = [location.text.strip() for location in location_div]"""
 #finds the class [PARTLY DONE]
-imglink_div = market_soup.find_all('span', class_="xt7dq6l xl1xv1r x6ikm8r x10wlt62 xh8yej3")
+#imglink_div = market_soup.find_all('span', class_="xt7dq6l xl1xv1r x6ikm8r x10wlt62 xh8yej3")
 #imglink_list = [imglink.text.strip() for imglink in imglink_div]
-
+"""
 imglink_list = []
 for imglink in imglink_div:
     imgurl = imglink.find('img')["src"]
-    imglink_list.append(imgurl)
+    imglink_list.append(imgurl)"""
 
-print(imglink_list)
 
 # Create a regular expression pattern to match city and state entries like "City, State"
 pattern = re.compile(r'(\w+(?:-\w+)?, [A-Z]{2})')
