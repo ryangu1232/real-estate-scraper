@@ -5,6 +5,8 @@ import pandas as pd
 import time
 import matplotlib.pyplot as plt
 import csv
+import excel
+import xlsx
 
 def write_word_to_csv(word):
     with open('words.csv', 'a', newline='') as file:
@@ -12,6 +14,8 @@ def write_word_to_csv(word):
         writer.writerow([word])
 
 browser = Browser("chrome")
+
+
 #make the search parameters
 location = "sanfrancisco"
 base_url = f"https://www.facebook.com/marketplace/{location}/search/?"
@@ -19,6 +23,8 @@ min_price = 0
 max_price = 50000
 days_listed = 30
 type_of_lease = "sublease"
+base_url = f"https://www.facebook.com/marketplace/{location}/search/?"
+
 #displays the full url
 url = f"{base_url}minPrice={min_price}&maxPrice={max_price}&daysSinceListed={days_listed}&query=sublease&exact=false"
 
@@ -48,7 +54,7 @@ market_soup = soup(html, 'html.parser')
 #write_word_to_csv(market_soup)
 
 # Check if HTML was scraped correctly
-browser.quit()
+#browser.quit()
 
 # Extract all the necessary info and insert into lists, below is a template for it
 """titles_div = market_soup.find_all('span', class_="x1lliihq x6ikm8r x10wlt62 x1n2onr6")
@@ -65,9 +71,22 @@ urls_list = [url.get('href') for url in urls_div]"""
 #finds the locations [NOT DONE]
 """location_div = market_soup.find_all('a', class_= "x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft")
 location_list = [location.text.strip() for location in location_div]"""
+#finds the class [PARTLY DONE]
+imglink_div = market_soup.find_all('span', class_="xt7dq6l xl1xv1r x6ikm8r x10wlt62 xh8yej3")
+#imglink_list = [imglink.text.strip() for imglink in imglink_div]
+
+imglink_list = []
+for imglink in imglink_div:
+    imgurl = imglink.find('img')["src"]
+    imglink_list.append(imgurl)
+    
+print(imglink_list)
 
 # Create a regular expression pattern to match city and state entries like "City, State"
 pattern = re.compile(r'(\w+(?:-\w+)?, [A-Z]{2})')
+
+
+#Goal: To be able to clean up the lists
 """
 # Initialize an empty list to store adjusted mileage entries
 price_list2 = []
@@ -130,8 +149,12 @@ pd.set_option('display.max_colwidth', None)
 
 vehicles_df.tail()"""
 
+
+"""
+#creates the table
 df = pd.DataFrame({'Name' : description_list[2:], 'Price' : prices_list}) 
 df.to_csv('listings.csv', index=False, encoding='utf-8')
-
+#df.to_excel("excel_listings.xlsx", sheet_name='Sheet_name_1')  
+"""
 
 
