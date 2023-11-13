@@ -5,8 +5,6 @@ import pandas as pd
 import time
 import matplotlib.pyplot as plt
 import csv
-import excel
-import xlsx
 
 def write_word_to_csv(word):
     with open('words.csv', 'a', newline='') as file:
@@ -15,10 +13,8 @@ def write_word_to_csv(word):
 
 browser = Browser("chrome")
 
-
 #make the search parameters
 location = "sanfrancisco"
-base_url = f"https://www.facebook.com/marketplace/{location}/search/?"
 min_price = 0
 max_price = 50000
 days_listed = 30
@@ -79,7 +75,7 @@ imglink_list = []
 for imglink in imglink_div:
     imgurl = imglink.find('img')["src"]
     imglink_list.append(imgurl)
-    
+
 print(imglink_list)
 
 # Create a regular expression pattern to match city and state entries like "City, State"
@@ -150,11 +146,11 @@ pd.set_option('display.max_colwidth', None)
 vehicles_df.tail()"""
 
 
-"""
+
 #creates the table
 df = pd.DataFrame({'Name' : description_list[2:], 'Price' : prices_list}) 
 df.to_csv('listings.csv', index=False, encoding='utf-8')
 #df.to_excel("excel_listings.xlsx", sheet_name='Sheet_name_1')  
-"""
+
 
 
