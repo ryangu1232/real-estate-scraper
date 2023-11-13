@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 
-url = "https://sublet.com/new-york-city?relation=2"
+url = "https://sublet.com/new-york-city"
 
 # Send an HTTP request to the URL
 response = requests.get(url)
@@ -24,3 +25,7 @@ for listing in listings[1:]:
         price = cleaned_parts[0]
         type_of_space = cleaned_parts[1]
         print(f"{type_of_space}, {price}")
+
+
+df = pd.DataFrame({'Name' : type_of_space[2:], 'Price' : price}) 
+df.to_csv('sublet.csv', index=False, encoding='utf-8')
