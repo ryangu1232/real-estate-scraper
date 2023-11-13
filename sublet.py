@@ -26,6 +26,3 @@ for listing in listings[1:]:
         type_of_space = cleaned_parts[1]
         print(f"{type_of_space}, {price}")
 
-
-df = pd.DataFrame({'Name' : type_of_space[2:], 'Price' : price}) 
-df.to_csv('sublet.csv', index=False, encoding='utf-8')
