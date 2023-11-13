@@ -27,13 +27,12 @@ with open('subletbath&rooms_listings.csv', mode='w', newline='', encoding='utf-8
         if bed_bath_info:
             beds_info = bed_bath_info.find('span', title=lambda x: x and 'Bed Room' in x)
             baths_info = bed_bath_info.find('span', title=lambda x: x and 'bath' in x)
-            beds = beds_info.get_text(strip=True) #if beds_info else 'N/A'
-            baths = baths_info.get_text(strip=True) #if baths_info else 'N/A'
+            beds = beds_info.get_text(strip=True) if beds_info else 'N/A'
+            baths = baths_info.get_text(strip=True) if baths_info else 'N/A'
 
 
         # Write the data to the CSV file
         writer.writerow([beds, baths])
 
-print()
-print()
+
 #print("Data written to sublet_listings.csv")
